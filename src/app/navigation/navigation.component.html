@@ -1,10 +1,6 @@
 <!-- navigation.component.html -->
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <a class="navbar-brand" routerLink="/feed">Math Society</a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
-            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
+    <a class="navbar-brand" routerLink="/feed">Social Network</a>
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav">
         <li class="nav-item">
@@ -14,6 +10,15 @@
           <a class="nav-link" routerLink="/profile">Profile</a>
         </li>
       </ul>
+    </div>
+    <div class="ml-auto">
+      <ng-container *ngIf="!authService.isAuthenticatedUser(); else logoutTemplate">
+        <a class="nav-link" routerLink="/login">Login</a>
+        <a class="nav-link" routerLink="/signup">Signup</a>
+      </ng-container>
+      <ng-template #logoutTemplate>
+        <button class="btn btn-link" (click)="logout()">Logout</button>
+      </ng-template>
     </div>
   </nav>
   
