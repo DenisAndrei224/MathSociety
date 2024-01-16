@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../auth.service';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-signup',
@@ -8,19 +9,36 @@ import { AuthService } from '../auth.service';
 })
 export class SignupComponent implements OnInit {
 
-  newUsername: string = '';
-  newPassword: string = '';
+  registrationForm: FormGroup;
 
-  constructor(private authService : AuthService) { }
+  constructor(private formBuilder: FormBuilder, private authService : AuthService) {
+    this.registrationForm = this.formBuilder.group({
+      username: ['', Validators.required],
+      email: ['', [Validators.required, Validators.email]],
+      password: ['', [Validators.required, Validators.minLength(6)]],
+      name: ['', Validators.required]
+    });
+  }
 
   ngOnInit(): void {
   }
 
-  signup(): void {
-    // Implement user registration logic
-    // For simplicity, assume successful signup
-    this.authService.login(this.newUsername, this.newPassword);
-    // Navigate to the desired route upon successful signup
+  onSubmit() {
+    if (this.registrationForm.valid) {
+      // Call the AuthService to register the user
+      this.authService.registerUser(this.registrationForm.value).subscribe(
+        (response) => {
+          console.log('Registration successful', response);
+          // You can handle the success response here
+        },
+        (error) => {
+          console.error('Registration failed', error);
+          // You can handle the error response here
+        }
+      );
+    } else {
+      console.log('Form is invalid. Please check the fields.');
+    }
   }
 
 }
